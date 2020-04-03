@@ -1,14 +1,14 @@
-﻿@model Registration
+﻿@model RegistrationModel
 @{
     ViewData["Title"] = "Privacy Policy";
 }
 
-<div class="col-md-offset-6 col-md-6">
+<div class="col-md-offset-6 col-md-8">
     <form asp-action="Registration" nethod="post" class="form-horizontal">
         <h1 class="a-spacing-small">Create account</h1>
         <div class="form-group">
             <div class="col-md-6">
-                <label>Your Name</label>
+                <label asp-for="Login"></label>
                 <input asp-for="Login" class="form-control">
                 <span asp-validation-for="Login" class="text-danger"></span>
             </div>
@@ -29,7 +29,7 @@
         </div>
         <div class="container">
             <div class="form-group col-md-offset-3 col-md-5">
-                <button asp-controller="Registration" asp-action="CreateAccount" class="btn btn-primary">Create Account</button>
+                <button asp-controller="Registration" asp-action="Registration" class="btn btn-primary">Create Account</button>
             </div>
         </div>
         <div class="a-row">

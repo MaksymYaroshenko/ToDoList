@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ToDoList.Models;
 
 namespace ToDoList.Controllers
 {
@@ -9,9 +10,15 @@ namespace ToDoList.Controllers
             return View();
         }
 
-        public IActionResult CreateAccount()
+        [HttpPost]
+        public IActionResult Registration(RegistrationModel registrationModel)
         {
-            return View();
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(registrationModel);
         }
     }
 }
