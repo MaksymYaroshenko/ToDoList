@@ -17,6 +17,10 @@
             <div class="col-md-6">
                 <label asp-for="Email"></label>
                 <input asp-for="Email" class="form-control">
+                @if (ViewBag.Message != null)
+                {
+                    <span class="text-danger">@ViewBag.Message</span>
+                }
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
         </div>
