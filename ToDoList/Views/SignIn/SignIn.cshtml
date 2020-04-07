@@ -6,14 +6,14 @@
 <div class="col-md-offset-6 col-md-8">
     <form asp-action="Registration" nethod="post" class="form-horizontal">
         <h1 class="a-spacing-small">Sign-In</h1>
+        @if (ViewBag.Message != null)
+        {
+            <span class="text-danger">@ViewBag.Message</span>
+        }
         <div class="form-group">
             <div class="col-md-6">
                 <label asp-for="Email"></label>
                 <input asp-for="Email" class="form-control">
-                @if (ViewBag.Message != null)
-                {
-                    <span class="text-danger">@ViewBag.Message</span>
-                }
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
         </div>
