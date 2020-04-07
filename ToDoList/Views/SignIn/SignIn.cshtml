@@ -1,18 +1,11 @@
-﻿@model RegistrationModel
+﻿@model SignInModel
 @{
-    ViewData["Title"] = "Registration";
+    ViewData["Title"] = "Sign-In";
 }
 
 <div class="col-md-offset-6 col-md-8">
     <form asp-action="Registration" nethod="post" class="form-horizontal">
-        <h1 class="a-spacing-small">Create account</h1>
-        <div class="form-group">
-            <div class="col-md-6">
-                <label asp-for="Login"></label>
-                <input asp-for="Login" class="form-control">
-                <span asp-validation-for="Login" class="text-danger"></span>
-            </div>
-        </div>
+        <h1 class="a-spacing-small">Sign-In</h1>
         <div class="form-group">
             <div class="col-md-6">
                 <label asp-for="Email"></label>
@@ -33,12 +26,12 @@
         </div>
         <div class="container">
             <div class="form-group col-md-offset-3 col-md-5">
-                <button asp-controller="Registration" asp-action="Registration" class="btn btn-primary">Create Account</button>
+                <button asp-controller="SignIn" asp-action="SignIn" class="btn btn-primary">Sign-In</button>
             </div>
         </div>
         <div class="a-row">
-            Already have an account?
-            <a class="a-link-emphasis" asp-controller="SignIn" asp-action="SignIn">Sign-In</a>
+            New to ToDoList?
+            <a class="a-link-emphasis" asp-controller="Registration" asp-action="Registration">Registration</a>
         </div>
     </form>
 </div>
