@@ -36,10 +36,12 @@ namespace ToDoList.Controllers
                 }
                 if (!exist)
                 {
-                    User user = new User();
-                    user.Email = registrationModel.Email;
-                    user.Password = registrationModel.Password;
-                    user.Login = registrationModel.Login;
+                    User user = new User
+                    {
+                        Email = registrationModel.Email,
+                        Password = registrationModel.Password,
+                        Login = registrationModel.Login
+                    };
                     db.Users.Add(user);
                     db.SaveChanges();
                     return RedirectToAction("Index", "Home");
