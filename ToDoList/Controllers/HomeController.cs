@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using ToDoList.Models;
@@ -16,7 +17,16 @@ namespace ToDoList.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var login = HttpContext.Session.GetString("Login");
+            if (string.IsNullOrEmpty(login))
+            {
+                return RedirectToAction("SignIn", "SignIn");
+            }
+            else
+            {
+                ViewBag.Login = login;
+                return View();
+            }
         }
 
         public IActionResult Error404()
