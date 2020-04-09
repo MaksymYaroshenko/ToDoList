@@ -18,12 +18,24 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-0">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="SignIn" asp-action="SignIn">Sign-In</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Registration" asp-action="Registration">Registration</a>
-                        </li>
+                        @if (ViewBag.Login != null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark">Hello @ViewBag.Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="SignIn" asp-action="LogOut">LogOut</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="SignIn" asp-action="SignIn">Sign-In</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Registration" asp-action="Registration">Registration</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

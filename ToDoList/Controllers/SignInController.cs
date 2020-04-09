@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using ToDoList.Database;
 using ToDoList.Models;
 
@@ -28,7 +29,10 @@ namespace ToDoList.Controllers
                     foreach (var user in db.Users)
                     {
                         if (user.Email == signInModel.Email && user.Password == signInModel.Password)
+                        {
+                            HttpContext.Session.SetString("Login", user.Login);
                             return RedirectToAction("Index", "Home");
+                        }
                     }
 
                     ViewBag.Message = "We cannot find such account. Please check Email and password";
@@ -41,6 +45,12 @@ namespace ToDoList.Controllers
             {
                 return RedirectToAction("Error404", "Home");
             }
+        }
+
+        public IActionResult LogOut()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("SignIn");
         }
     }
 }
