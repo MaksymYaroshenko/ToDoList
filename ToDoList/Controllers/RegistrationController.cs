@@ -22,20 +22,18 @@ namespace ToDoList.Controllers
         [HttpPost]
         public IActionResult Registration(RegistrationModel registrationModel)
         {
-            if (ModelState.IsValid)
+            try
             {
-                bool exist = false;
-                foreach (var email in db.Users)
+                if (ModelState.IsValid)
                 {
-                    if (email.Email == registrationModel.Email)
+                    foreach (var email in db.Users)
                     {
-                        exist = true;
-                        ViewBag.Message = "The user with such Email exist";
-                        return View(registrationModel);
+                        if (email.Email == registrationModel.Email)
+                        {
+                            ViewBag.Message = "The user with such Email exist";
+                            return View(registrationModel);
+                        }
                     }
-                }
-                if (!exist)
-                {
                     User user = new User
                     {
                         Email = registrationModel.Email,
@@ -46,8 +44,12 @@ namespace ToDoList.Controllers
                     db.SaveChanges();
                     return RedirectToAction("Index", "Home");
                 }
+                return View(registrationModel);
             }
-            return View(registrationModel);
+            catch
+            {
+                return RedirectToAction("Error404", "Home");
+            }
         }
     }
 }
