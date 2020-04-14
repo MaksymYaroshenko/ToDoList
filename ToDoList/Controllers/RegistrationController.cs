@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using ToDoList.Database;
 using ToDoList.Database.Entities;
 using ToDoList.Models;
@@ -42,6 +43,7 @@ namespace ToDoList.Controllers
                     };
                     db.Users.Add(user);
                     db.SaveChanges();
+                    HttpContext.Session.SetString("Login", registrationModel.Login);
                     return RedirectToAction("Index", "Home");
                 }
                 return View(registrationModel);
