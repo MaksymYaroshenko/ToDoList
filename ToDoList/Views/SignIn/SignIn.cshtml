@@ -3,35 +3,37 @@
     ViewData["Title"] = "Sign-In";
 }
 
-<div class="col-md-offset-6 col-md-8">
-    <form asp-action="Registration" nethod="post" class="form-horizontal">
-        <h1 class="a-spacing-small">Sign-In</h1>
-        @if (ViewBag.Message != null)
-        {
-            <span class="text-danger">@ViewBag.Message</span>
-        }
-        <div class="form-group">
-            <div class="col-md-6">
-                <label asp-for="Email"></label>
-                <input asp-for="Email" class="form-control">
-                <span asp-validation-for="Email" class="text-danger"></span>
+<div class="sign-in-container">
+    <div class="container h-100">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="col-10 col-md-6 col-lg-3">
+                <form asp-action="Registration" nethod="post" class="form-horizontal">
+                    <h1 class="a-spacing-small" style="text-align:center;">Sign-In</h1>
+                    @if (ViewBag.Message != null)
+                    {
+                        <span class="text-danger">@ViewBag.Message</span>
+                    }
+                    <div class="form-group">
+                        <label asp-for="Email"></label>
+                        <input asp-for="Email" class="form-control">
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password"></label>
+                        <input asp-for="Password" class="form-control">
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="container">
+                        <div class="form-group col-md-offset-3 text-center">
+                            <button asp-controller="SignIn" asp-action="SignIn" class="btn btn-primary">Sign-In</button>
+                        </div>
+                    </div>
+                    <div class="a-row">
+                        New to ToDoList?
+                        <a class="a-link-emphasis" asp-controller="Registration" asp-action="Registration">Registration</a>
+                    </div>
+                </form>
             </div>
         </div>
-        <div class="form-group">
-            <div class="col-md-6">
-                <label asp-for="Password"></label>
-                <input asp-for="Password" class="form-control">
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="container">
-            <div class="form-group col-md-offset-3 col-md-5">
-                <button asp-controller="SignIn" asp-action="SignIn" class="btn btn-primary">Sign-In</button>
-            </div>
-        </div>
-        <div class="a-row">
-            New to ToDoList?
-            <a class="a-link-emphasis" asp-controller="Registration" asp-action="Registration">Registration</a>
-        </div>
-    </form>
+    </div>
 </div>

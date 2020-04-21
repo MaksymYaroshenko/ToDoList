@@ -2,38 +2,36 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div>
+<div class="index-container">
     <form asp-action="Index" nethod="post" class="form-horizontal">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-2">
-                    <ul class="nav nav-pills flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">All tasks</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Important</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Done</a>
-                        </li>
-                    </ul>
-                    <hr class="d-sm-none">
+        <div class="row">
+            <div class="col-sm-2">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">All tasks</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Important</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Done</a>
+                    </li>
+                </ul>
+                <hr class="d-sm-none">
+            </div>
+            <div class="col-sm-8">
+                <h2 class="text-primary">Tasks</h2>
+                <div class="form-group">
+                    <button class="btn btn-primary" id="add-icon" onClick="add_new_task_click()">
+                        Add a task
+                        <i class="icon " aria-hidden="true"></i>
+                    </button>
                 </div>
-                <div class="col-sm-8">
-                    <h2>Tasks</h2>
-                    <div class="form-group">
-                        <button class="btn btn-primary" id="add-icon" onClick="reply_click()" OnClientClick="return false;">
-                            Add a task
-                            <i class="icon " aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group mb-3" id="new-task" style="display:none">
-                            <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" type="button">Button</button>
-                            </div>
+                <div class="form-group">
+                    <div class="input-group mb-3" id="new-task" style="display:none">
+                        <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button">Button</button>
                         </div>
                     </div>
                 </div>
