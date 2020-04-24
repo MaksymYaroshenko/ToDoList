@@ -1,9 +1,20 @@
-﻿@{
+﻿@model NewTaskModel
+@{
     ViewData["Title"] = "Home Page";
+    if (ViewBag.CurrentUser != null && Model != null)
+    {
+        Model.UserId = ViewBag.CurrentUser;
+    }
 }
 
 <div class="index-container">
-    <form asp-action="Index" nethod="post" class="form-horizontal">
+    <form asp-action="Index" method="post" class="form-horizontal">
+        @{
+            if (ViewBag.CurrentUser != null && Model != null)
+            {
+                Model.UserId = ViewBag.CurrentUser;
+            }
+        }
         <div class="row">
             <div class="col-sm-2">
                 <ul class="nav nav-pills flex-column">
@@ -29,11 +40,13 @@
                 </div>
                 <div class="form-group">
                     <div class="input-group mb-3" id="new-task" style="display:none">
-                        <input type="text" class="form-control" placeholder="Enter your task" id="new-task-input">
+                        <input class="form-control" placeholder="Enter your task" id="new-task-input" asp-for="TaskText">
                         <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" id="new-task-btn">Add new Task</button>
+                            <button class="btn btn-outline-secondary" id="new-task-btn" asp-controller="Home" asp-action="AddNewTask">Add new Task</button>
                         </div>
                     </div>
+                    <span asp-validation-for="TaskText" class="text-danger"></span>
+                    <input asp-for="UserId" value=@ViewBag.CurrentUser style="display:none"/>
                 </div>
             </div>
         </div>
