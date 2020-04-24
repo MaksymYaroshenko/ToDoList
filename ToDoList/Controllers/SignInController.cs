@@ -31,6 +31,7 @@ namespace ToDoList.Controllers
                         if (user.Email == signInModel.Email && user.Password == signInModel.Password)
                         {
                             HttpContext.Session.SetString("Login", user.Login);
+                            TempData["currentUser"] = user.Id;
                             return RedirectToAction("Index", "Home");
                         }
                     }
