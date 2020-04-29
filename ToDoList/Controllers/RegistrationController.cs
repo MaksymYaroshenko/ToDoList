@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ToDoList.Database;
 using ToDoList.Database.Entities;
@@ -35,10 +36,11 @@ namespace ToDoList.Controllers
                             return View(registrationModel);
                         }
                     }
+                    PasswordHasher passwordHash = new PasswordHasher();
                     User user = new User
                     {
                         Email = registrationModel.Email,
-                        Password = registrationModel.Password,
+                        Password = passwordHash.HashPassword(registrationModel.Password),
                         Login = registrationModel.Login
                     };
                     db.Users.Add(user);
