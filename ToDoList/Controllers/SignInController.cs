@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ToDoList.Database;
 using ToDoList.Models;
@@ -26,9 +27,11 @@ namespace ToDoList.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    PasswordHasher passwordHasher = new PasswordHasher();
                     foreach (var user in db.Users)
                     {
-                        if (user.Email == signInModel.Email && user.Password == signInModel.Password)
+                        var result = passwordHasher.VerifyHashedPassword(user.Password, signInModel.Password);
+                        if (user.Email == signInModel.Email && result == PasswordVerificationResult.Success)
                         {
                             HttpContext.Session.SetString("Login", user.Login);
                             TempData["currentUser"] = user.Id;
