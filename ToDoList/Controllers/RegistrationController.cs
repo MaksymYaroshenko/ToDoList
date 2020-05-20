@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using ToDoList.Database;
 using ToDoList.Database.Entities;
 using ToDoList.Models;
@@ -28,25 +29,26 @@ namespace ToDoList.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    foreach (var email in db.Users)
+                    User user = db.Users.FirstOrDefault(e => e.Email == registrationModel.Email);
+                    if (user == null)
                     {
-                        if (email.Email == registrationModel.Email)
+                        PasswordHasher passwordHash = new PasswordHasher();
+                        user = new User
                         {
-                            ViewBag.Message = "The user with such Email exist";
-                            return View(registrationModel);
-                        }
+                            Email = registrationModel.Email,
+                            Password = passwordHash.HashPassword(registrationModel.Password),
+                            Login = registrationModel.Login
+                        };
+                        db.Users.Add(user);
+                        db.SaveChanges();
+                        HttpContext.Session.SetString("Login", registrationModel.Login);
+                        return RedirectToAction("Index", "Home");
                     }
-                    PasswordHasher passwordHash = new PasswordHasher();
-                    User user = new User
+                    else
                     {
-                        Email = registrationModel.Email,
-                        Password = passwordHash.HashPassword(registrationModel.Password),
-                        Login = registrationModel.Login
-                    };
-                    db.Users.Add(user);
-                    db.SaveChanges();
-                    HttpContext.Session.SetString("Login", registrationModel.Login);
-                    return RedirectToAction("Index", "Home");
+                        ViewBag.Message = "The user with such Email exist";
+                        return View(registrationModel);
+                    }
                 }
                 return View(registrationModel);
             }
