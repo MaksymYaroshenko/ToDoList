@@ -53,8 +53,8 @@ namespace ToDoList.Controllers
 
         public IActionResult LogOut()
         {
-            HttpContext.Session.Clear();
-            return RedirectToAction("SignIn");
+            DeleteTempFile();
+            return RedirectToAction("Index", "Home");
         }
 
         private void WriteToTemp(string userLogin, int userId)
@@ -63,6 +63,16 @@ namespace ToDoList.Controllers
             using StreamWriter tempFile = new StreamWriter(Path.Combine(tempPath, ConfigurationManager.AppSetting["TempFile:TempFile"]), true);
             tempFile.WriteLine(userLogin);
             tempFile.WriteLine(userId);
+        }
+
+        private void DeleteTempFile()
+        {
+            string tempPath = Path.GetTempPath();
+            string tempFile = Path.Combine(tempPath, ConfigurationManager.AppSetting["TempFile:TempFile"]);
+            if (System.IO.File.Exists(tempFile))
+            {
+                System.IO.File.Delete(tempFile);
+            }
         }
     }
 }
