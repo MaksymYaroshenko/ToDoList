@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
+using System.Linq;
 using ToDoList.Database;
 using ToDoList.Models;
 
@@ -27,22 +29,22 @@ namespace ToDoList.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    PasswordHasher passwordHasher = new PasswordHasher();
-                    foreach (var user in db.Users)
+                    var user = db.Users.FirstOrDefault(e => e.Email == signInModel.Email);
+                    if (user != null)
                     {
+                        PasswordHasher passwordHasher = new PasswordHasher();
                         var result = passwordHasher.VerifyHashedPassword(user.Password, signInModel.Password);
-                        if (user.Email == signInModel.Email && result == PasswordVerificationResult.Success)
+                        if (result == PasswordVerificationResult.Success)
                         {
                             HttpContext.Session.SetString("Login", user.Login);
                             TempData["currentUser"] = user.Id;
+                            WriteToTemp(user.Login, user.Id);
                             return RedirectToAction("Index", "Home");
                         }
                     }
-
                     ViewBag.Message = "We cannot find such account. Please check Email and password";
                     return View(signInModel);
                 }
-
                 return View(signInModel);
             }
             catch
@@ -55,6 +57,14 @@ namespace ToDoList.Controllers
         {
             HttpContext.Session.Clear();
             return RedirectToAction("SignIn");
+        }
+
+        private void WriteToTemp(string userLogin, int userId)
+        {
+            string tempPath = Path.GetTempPath();
+            using StreamWriter tempFile = new StreamWriter(Path.Combine(tempPath, "ToDoListAppTemp.txt"), true);
+            tempFile.WriteLine(userLogin);
+            tempFile.WriteLine(userId);
         }
     }
 }
