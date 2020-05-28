@@ -36,8 +36,6 @@ namespace ToDoList.Controllers
                         var result = passwordHasher.VerifyHashedPassword(user.Password, signInModel.Password);
                         if (result == PasswordVerificationResult.Success)
                         {
-                            HttpContext.Session.SetString("Login", user.Login);
-                            TempData["currentUser"] = user.Id;
                             WriteToTemp(user.Login, user.Id);
                             return RedirectToAction("Index", "Home");
                         }
@@ -62,7 +60,7 @@ namespace ToDoList.Controllers
         private void WriteToTemp(string userLogin, int userId)
         {
             string tempPath = Path.GetTempPath();
-            using StreamWriter tempFile = new StreamWriter(Path.Combine(tempPath, "ToDoListAppTemp.txt"), true);
+            using StreamWriter tempFile = new StreamWriter(Path.Combine(tempPath, ConfigurationManager.AppSetting["TempFile:TempFile"]), true);
             tempFile.WriteLine(userLogin);
             tempFile.WriteLine(userId);
         }
