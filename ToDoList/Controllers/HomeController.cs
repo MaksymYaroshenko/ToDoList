@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -33,7 +34,16 @@ namespace ToDoList.Controllers
             {
                 ViewBag.Login = tempData[0];
                 ViewBag.CurrentUser = tempData[1];
-                return View();
+                IEnumerable<Task> tasks = db.Tasks.Where(i => i.UserId == Convert.ToInt32(tempData[1])).OrderByDescending(i => i.Date);
+                TaskListModel model = new TaskListModel
+                {
+                    Tasks = tasks
+                };
+                TaskModel taskModel = new TaskModel
+                {
+                    TaskListModel = model
+                };
+                return View(taskModel);
             }
         }
 
