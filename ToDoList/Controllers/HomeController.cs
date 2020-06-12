@@ -61,6 +61,15 @@ namespace ToDoList.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPut]
+        public IActionResult DeleteTask(Task task)
+        {
+            var taskForDeleting = db.Tasks.Where(i => i.ID == task.ID).FirstOrDefault();
+            db.Tasks.Remove(taskForDeleting);
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
         public IActionResult Error404()
         {
             return View();

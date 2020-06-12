@@ -15,3 +15,31 @@ taskInput.addEventListener('input', function () {
         taskBtn.disabled = true;
     }
 });
+
+var myNodelist = document.getElementsByClassName("task-list-li");
+for (i = 0; i < myNodelist.length; i++) {
+    var span = document.createElement("SPAN");
+    var txt = document.createTextNode("\u00D7");
+    span.className = "close";
+    span.appendChild(txt);
+    myNodelist[i].appendChild(span);
+}
+
+var close = document.getElementsByClassName("close");
+for (i = 0; i < close.length; i++) {
+    close[i].onclick = function () {
+        var task = new Object();
+        task.id = this.parentElement.id;
+        $.ajax({
+            url: 'https://localhost:44315/Home/DeleteTask',
+            type: 'PUT',
+            data: task,
+            success: function (data, textStatus, xhr) {
+                location.reload();
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.log('Error in Operation');
+            }
+        });
+    }
+}

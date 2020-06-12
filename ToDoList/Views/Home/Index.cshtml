@@ -44,7 +44,9 @@
                         @{
                             foreach (var task in Model.TaskListModel.Tasks)
                             {
-                                <li class="task-list-li">@task.Text</li>
+                                <li class="task-list-li" id=@task.ID>
+                                    @task.Text
+                                </li>
                             }
                         }
                     </ul>
