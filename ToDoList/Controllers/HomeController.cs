@@ -70,6 +70,19 @@ namespace ToDoList.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPut]
+        public IActionResult CompleteTask(Task task)
+        {
+            var taskForCompleting = db.Tasks.Where(i => i.ID == task.ID).ToList();
+            if (taskForCompleting[0].IsDone)
+                taskForCompleting.ForEach(i => i.IsDone = false);
+            else
+                taskForCompleting.ForEach(i => i.IsDone = true);
+            db.Tasks.Update(taskForCompleting.First());
+            db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
         public IActionResult Error404()
         {
             return View();
