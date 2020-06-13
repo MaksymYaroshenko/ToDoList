@@ -61,7 +61,7 @@ namespace ToDoList.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpPut]
+        [HttpDelete]
         public IActionResult DeleteTask(Task task)
         {
             var taskForDeleting = db.Tasks.Where(i => i.ID == task.ID).FirstOrDefault();

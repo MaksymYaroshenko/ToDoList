@@ -32,7 +32,7 @@ for (i = 0; i < close.length; i++) {
         task.id = this.parentElement.id;
         $.ajax({
             url: 'https://localhost:44315/Home/DeleteTask',
-            type: 'PUT',
+            type: 'DELETE',
             data: task,
             success: function (data, textStatus, xhr) {
                 location.reload();
