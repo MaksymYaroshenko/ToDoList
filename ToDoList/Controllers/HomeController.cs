@@ -34,7 +34,7 @@ namespace ToDoList.Controllers
             {
                 ViewBag.Login = tempData[0];
                 ViewBag.CurrentUser = tempData[1];
-                IEnumerable<Task> tasks = db.Tasks.Where(i => i.UserId == Convert.ToInt32(tempData[1])).OrderByDescending(i => i.Date);
+                IEnumerable<Task> tasks = db.Tasks.Where(i => i.UserId == Convert.ToInt32(tempData[1])).OrderBy(i => i.IsDone).ThenByDescending(i => i.Date);
                 TaskListModel model = new TaskListModel
                 {
                     Tasks = tasks

@@ -43,3 +43,10 @@ for (i = 0; i < close.length; i++) {
         });
     }
 }
+
+var taskList = document.getElementsByClassName("task-list-li");
+for (i = 0; i < taskList.length; i++) {
+    if (taskList[i].value === 1) {
+        taskList[i].classList.toggle('checked');
+    }
+}
