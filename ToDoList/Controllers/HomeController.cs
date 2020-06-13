@@ -25,62 +25,90 @@ namespace ToDoList.Controllers
 
         public IActionResult Index()
         {
-            var tempData = GetDataFromTempFile();
-            if (tempData == null)
+            try
             {
-                return RedirectToAction("SignIn", "SignIn");
+                var tempData = GetDataFromTempFile();
+                if (tempData == null)
+                {
+                    return RedirectToAction("SignIn", "SignIn");
+                }
+                else
+                {
+                    ViewBag.Login = tempData[0];
+                    ViewBag.CurrentUser = tempData[1];
+                    IEnumerable<Task> tasks = db.Tasks.Where(i => i.UserId == Convert.ToInt32(tempData[1])).OrderBy(i => i.IsDone).ThenByDescending(i => i.Date);
+                    TaskListModel model = new TaskListModel
+                    {
+                        Tasks = tasks
+                    };
+                    TaskModel taskModel = new TaskModel
+                    {
+                        TaskListModel = model
+                    };
+                    return View(taskModel);
+                }
             }
-            else
+            catch
             {
-                ViewBag.Login = tempData[0];
-                ViewBag.CurrentUser = tempData[1];
-                IEnumerable<Task> tasks = db.Tasks.Where(i => i.UserId == Convert.ToInt32(tempData[1])).OrderBy(i => i.IsDone).ThenByDescending(i => i.Date);
-                TaskListModel model = new TaskListModel
-                {
-                    Tasks = tasks
-                };
-                TaskModel taskModel = new TaskModel
-                {
-                    TaskListModel = model
-                };
-                return View(taskModel);
+                return RedirectToAction("Error404");
             }
         }
 
         [HttpPost]
         public IActionResult AddNewTask(NewTaskModel newTaskModel)
         {
-            Task task = new Task()
+            try
             {
-                Date = DateTime.Now,
-                Text = newTaskModel.TaskText,
-                UserId = newTaskModel.UserId
-            };
-            db.Tasks.Add(task);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+                Task task = new Task()
+                {
+                    Date = DateTime.Now,
+                    Text = newTaskModel.TaskText,
+                    UserId = newTaskModel.UserId
+                };
+                db.Tasks.Add(task);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return RedirectToAction("Error404");
+            }
         }
 
         [HttpDelete]
         public IActionResult DeleteTask(Task task)
         {
-            var taskForDeleting = db.Tasks.Where(i => i.ID == task.ID).FirstOrDefault();
-            db.Tasks.Remove(taskForDeleting);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                var taskForDeleting = db.Tasks.Where(i => i.ID == task.ID).FirstOrDefault();
+                db.Tasks.Remove(taskForDeleting);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return RedirectToAction("Error404");
+            }
         }
 
         [HttpPut]
         public IActionResult CompleteTask(Task task)
         {
-            var taskForCompleting = db.Tasks.Where(i => i.ID == task.ID).ToList();
-            if (taskForCompleting[0].IsDone)
-                taskForCompleting.ForEach(i => i.IsDone = false);
-            else
-                taskForCompleting.ForEach(i => i.IsDone = true);
-            db.Tasks.Update(taskForCompleting.First());
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                var taskForCompleting = db.Tasks.Where(i => i.ID == task.ID).ToList();
+                if (taskForCompleting[0].IsDone)
+                    taskForCompleting.ForEach(i => i.IsDone = false);
+                else
+                    taskForCompleting.ForEach(i => i.IsDone = true);
+                db.Tasks.Update(taskForCompleting.First());
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return RedirectToAction("Error404");
+            }
         }
 
         public IActionResult Error404()
