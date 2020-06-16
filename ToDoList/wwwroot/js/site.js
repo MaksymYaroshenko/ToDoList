@@ -18,11 +18,21 @@ taskInput.addEventListener('input', function () {
 });
 
 for (i = 0; i < taskList.length; i++) {
-    var span = document.createElement("SPAN");
-    var txt = document.createTextNode("\u00D7");
-    span.className = "close";
-    span.appendChild(txt);
-    taskList[i].appendChild(span);
+    var closeSpan = document.createElement("SPAN");
+    var closeSpanText = document.createTextNode("\u00D7");
+    closeSpan.className = "close";
+    closeSpan.appendChild(closeSpanText);
+    taskList[i].appendChild(closeSpan);
+
+    var importantSpan = document.createElement("SPAN");
+    var importantSpantext = document.createTextNode("\u2606");
+    var importantSpanTooltip = document.createElement("SPAN");
+    importantSpanTooltip.className = "tooltipText";
+    importantSpanTooltip.textContent = "Mark task as important.";
+    importantSpan.className = "important";
+    importantSpan.appendChild(importantSpanTooltip);
+    importantSpan.appendChild(importantSpantext);
+    taskList[i].appendChild(importantSpan);
 }
 
 var close = document.getElementsByClassName("close");
