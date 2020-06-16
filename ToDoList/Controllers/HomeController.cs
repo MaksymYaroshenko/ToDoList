@@ -111,6 +111,26 @@ namespace ToDoList.Controllers
             }
         }
 
+        [HttpPut]
+        public IActionResult MakeImportant(Task task)
+        {
+            try
+            {
+                var taskForCompleting = db.Tasks.Where(i => i.ID == task.ID).ToList();
+                if (taskForCompleting[0].IsImportant)
+                    taskForCompleting.ForEach(i => i.IsImportant = false);
+                else
+                    taskForCompleting.ForEach(i => i.IsImportant = true);
+                db.Tasks.Update(taskForCompleting.First());
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch 
+            {
+                return RedirectToAction("Error404");
+            }
+        }
+
         public IActionResult Error404()
         {
             return View();

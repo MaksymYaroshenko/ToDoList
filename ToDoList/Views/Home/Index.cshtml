@@ -44,7 +44,7 @@
                         @{
                             foreach (var task in Model.TaskListModel.Tasks)
                             {
-                                <li class="task-list-li" id=@task.ID value=@Convert.ToInt32(task.IsDone)>
+                                <li class="task-list-li" id=@task.ID value=@Convert.ToInt32(task.IsDone) tabindex=@Convert.ToInt32(task.IsImportant)>
                                     @task.Text
                                 </li>
                             }

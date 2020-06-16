@@ -58,18 +58,42 @@ for (i = 0; i < taskList.length; i++) {
     if (taskList[i].value === 1) {
         taskList[i].classList.toggle('checked');
     }
-    taskList[i].onclick = function () {
+    taskList[i].addEventListener('click', function (ev) {
+        if (ev.target.tagName === 'LI') {
+            var task = new Object();
+            task.id = this.id;
+            $.ajax({
+                url: 'https://localhost:44315/Home/CompleteTask',
+                type: 'PUT',
+                data: task,
+                success: function (data, textStatus, xhr) {
+                    location.reload();
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                    console.log('Error in "IsDone" Operation');
+                }
+            });
+        }
+    }, false);
+}
+
+var important = document.getElementsByClassName("important");
+for (i = 0; i < important.length; i++) {
+    if (taskList[i].tabIndex === 1) {
+        important[i].textContent = "\u2605";
+    }
+    important[i].onclick = function () {
         var task = new Object();
-        task.id = this.id;
+        task.id = this.parentElement.id;
         $.ajax({
-            url: 'https://localhost:44315/Home/CompleteTask',
+            url: 'https://localhost:44315/Home/MakeImportant',
             type: 'PUT',
             data: task,
             success: function (data, textStatus, xhr) {
                 location.reload();
             },
             error: function (xhr, textStatus, errorThrown) {
-                console.log('Error in "IsDone" Operation');
+                console.log('Error in "IsImportant" Operation');
             }
         });
     }
