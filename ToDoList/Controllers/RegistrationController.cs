@@ -10,7 +10,7 @@ namespace ToDoList.Controllers
 {
     public class RegistrationController : Controller
     {
-        DatabaseContext db;
+        readonly DatabaseContext db;
 
         public RegistrationController()
         {
