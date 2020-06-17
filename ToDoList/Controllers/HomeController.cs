@@ -15,7 +15,7 @@ namespace ToDoList.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private DatabaseContext db;
+        private readonly DatabaseContext db;
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -36,16 +36,66 @@ namespace ToDoList.Controllers
                 {
                     ViewBag.Login = tempData[0];
                     ViewBag.CurrentUser = tempData[1];
-                    IEnumerable<Task> tasks = db.Tasks.Where(i => i.UserId == Convert.ToInt32(tempData[1])).OrderBy(i => i.IsDone).ThenByDescending(i => i.Date);
+                    IEnumerable<Task> allTasks = db.Tasks.Where(i => i.UserId == Convert.ToInt32(tempData[1])).OrderBy(i => i.IsDone).ThenByDescending(i => i.Date);
                     TaskListModel model = new TaskListModel
                     {
-                        Tasks = tasks
+                        Tasks = allTasks
                     };
                     TaskModel taskModel = new TaskModel
                     {
                         TaskListModel = model
                     };
                     return View(taskModel);
+                }
+            }
+            catch
+            {
+                return RedirectToAction("Error404");
+            }
+        }
+
+        [Route("Home/Index/{category}")]
+        public IActionResult Index(string category)
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(category))
+                {
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    var tempData = GetDataFromTempFile();
+                    if (tempData == null)
+                    {
+                        return RedirectToAction("SignIn", "SignIn");
+                    }
+                    else
+                    {
+                        ViewBag.Login = tempData[0];
+                        ViewBag.CurrentUser = tempData[1];
+                        IEnumerable<Task> tasks = null;
+                        IEnumerable<Task> allTasks = db.Tasks.Where(i => i.UserId == Convert.ToInt32(tempData[1])).OrderBy(i => i.IsDone).ThenByDescending(i => i.Date);
+                        if (string.Equals("important", category, StringComparison.OrdinalIgnoreCase))
+                        {
+                            tasks = allTasks.Where(i => i.IsImportant == true);
+                        }
+
+                        if (string.Equals("done", category, StringComparison.OrdinalIgnoreCase))
+                        {
+                            tasks = allTasks.Where(i => i.IsDone == true);
+                        }
+
+                        TaskListModel model = new TaskListModel
+                        {
+                            Tasks = tasks
+                        };
+                        TaskModel taskModel = new TaskModel
+                        {
+                            TaskListModel = model
+                        };
+                        return View(taskModel);
+                    }
                 }
             }
             catch
@@ -125,7 +175,7 @@ namespace ToDoList.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch 
+            catch
             {
                 return RedirectToAction("Error404");
             }
