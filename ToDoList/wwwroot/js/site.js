@@ -41,7 +41,7 @@ for (i = 0; i < close.length; i++) {
         var task = new Object();
         task.id = this.parentElement.id;
         $.ajax({
-            url: 'https://localhost:44315/Home/DeleteTask',
+            url: '/Home/DeleteTask',
             type: 'DELETE',
             data: task,
             success: function (data, textStatus, xhr) {
@@ -63,7 +63,7 @@ for (i = 0; i < taskList.length; i++) {
             var task = new Object();
             task.id = this.id;
             $.ajax({
-                url: 'https://localhost:44315/Home/CompleteTask',
+                url: '/Home/CompleteTask',
                 type: 'PUT',
                 data: task,
                 success: function (data, textStatus, xhr) {
@@ -86,7 +86,7 @@ for (i = 0; i < important.length; i++) {
         var task = new Object();
         task.id = this.parentElement.id;
         $.ajax({
-            url: 'https://localhost:44315/Home/MakeImportant',
+            url: '/Home/MakeImportant',
             type: 'PUT',
             data: task,
             success: function (data, textStatus, xhr) {
