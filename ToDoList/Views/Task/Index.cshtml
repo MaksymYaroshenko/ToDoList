@@ -1,0 +1,57 @@
+﻿@model TaskModel
+
+@{
+    ViewData["Title"] = "Tasks";
+}
+
+<div class="index-container">
+    <form asp-action="Index" method="post" class="form-horizontal">
+        <div class="row">
+            <div class="col-sm-2">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Task/">All tasks</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Task/Index/important">Important</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/Task/Index/myday">My Day</a>
+                    </li>
+                </ul>
+                <hr class="d-sm-none">
+            </div>
+            <div class="col-sm-8">
+                <h2 class="text-primary">Tasks</h2>
+                <div class="form-group">
+                    <button class="btn btn-primary" id="add-icon" onClick="add_new_task_click()">
+                        Add a task
+                        <i class="icon " aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="form-group">
+                    <div class="input-group mb-3" id="new-task" style="display:none">
+                        <input class="form-control" placeholder="Enter your task" id="new-task-input" asp-for="NewTaskModel.TaskText">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" id="new-task-btn" asp-controller="Task" asp-action="AddNewTask">Add new Task</button>
+                        </div>
+                    </div>
+                    <span asp-validation-for="NewTaskModel.TaskText" class="text-danger"></span>
+                    <input asp-for="NewTaskModel.UserId" value=@ViewBag.CurrentUser style="display:none" />
+                </div>
+                <div class="form-group">
+                    <ul class="task-list" id="myUL">
+                        @{
+                            foreach (var task in Model.TaskListModel.Tasks)
+                            {
+                                <li class="task-list-li" id=@task.ID value=@Convert.ToInt32(task.IsDone) tabindex=@Convert.ToInt32(task.IsImportant)>
+                                    @task.Text
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

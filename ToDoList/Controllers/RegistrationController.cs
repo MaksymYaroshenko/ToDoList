@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNet.Identity;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using ToDoList.Database;
@@ -41,8 +40,7 @@ namespace ToDoList.Controllers
                         };
                         db.Users.Add(user);
                         db.SaveChanges();
-                        HttpContext.Session.SetString("Login", registrationModel.Login);
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Task");
                     }
                     else
                     {
