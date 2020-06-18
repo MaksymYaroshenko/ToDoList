@@ -81,9 +81,9 @@ namespace ToDoList.Controllers
                             tasks = allTasks.Where(i => i.IsImportant == true);
                         }
 
-                        if (string.Equals("done", category, StringComparison.OrdinalIgnoreCase))
+                        if (string.Equals("myday", category, StringComparison.OrdinalIgnoreCase))
                         {
-                            tasks = allTasks.Where(i => i.IsDone == true);
+                            tasks = allTasks.Where(i => i.Date.Date == DateTime.Today);
                         }
 
                         TaskListModel model = new TaskListModel
