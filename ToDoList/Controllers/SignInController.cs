@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 using ToDoList.Database;
 using ToDoList.Models;
 
@@ -9,20 +13,20 @@ namespace ToDoList.Controllers
 {
     public class SignInController : Controller
     {
-        private DatabaseContext db;
+        private readonly DatabaseContext db;
 
         public SignInController()
         {
             db = new DatabaseContext();
         }
 
-        public IActionResult SignIn()
+        public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult SignIn(SignInModel signInModel)
+        public async Task<IActionResult> Login(SignInModel signInModel)
         {
             try
             {
@@ -35,8 +39,16 @@ namespace ToDoList.Controllers
                         var result = passwordHasher.VerifyHashedPassword(user.Password, signInModel.Password);
                         if (result == PasswordVerificationResult.Success)
                         {
-                            WriteToTemp(user.Login, user.Id);
-                            return RedirectToAction("Index", "Home");
+                            var claims = new List<Claim>
+                            {
+                                new Claim(ClaimTypes.Name, user.Login), // User Name
+                                new Claim(ClaimTypes.PrimarySid, user.Id.ToString()) // User ID
+                            };
+                            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                            var principal = new ClaimsPrincipal(identity);
+                            var props = new AuthenticationProperties();
+                            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, props).Wait();
+                            return RedirectToAction("Index", "Task");
                         }
                     }
                     ViewBag.Message = "We cannot find such account. Please check Email and password";
@@ -50,28 +62,10 @@ namespace ToDoList.Controllers
             }
         }
 
-        public IActionResult LogOut()
+        public async Task<IActionResult> LogOut()
         {
-            DeleteTempFile();
+            await HttpContext.SignOutAsync();
             return RedirectToAction("Index", "Home");
-        }
-
-        private void WriteToTemp(string userLogin, int userId)
-        {
-            string tempPath = Path.GetTempPath();
-            using StreamWriter tempFile = new StreamWriter(Path.Combine(tempPath, ConfigurationManager.AppSetting["TempFile:TempFile"]), true);
-            tempFile.WriteLine(userLogin);
-            tempFile.WriteLine(userId);
-        }
-
-        private void DeleteTempFile()
-        {
-            string tempPath = Path.GetTempPath();
-            string tempFile = Path.Combine(tempPath, ConfigurationManager.AppSetting["TempFile:TempFile"]);
-            if (System.IO.File.Exists(tempFile))
-            {
-                System.IO.File.Delete(tempFile);
-            }
         }
     }
 }

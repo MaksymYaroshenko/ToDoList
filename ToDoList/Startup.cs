@@ -1,9 +1,9 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 
 namespace ToDoList
 {
@@ -18,14 +18,14 @@ namespace ToDoList
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDistributedMemoryCache();
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
-            services.AddControllersWithViews();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/SignIn/Login";
+                    options.Cookie.Name = "ToDoCookie";
+                }
+                );
+            services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -44,8 +44,10 @@ namespace ToDoList
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-            app.UseSession();
+
+            app.UseCookiePolicy();
 
             app.UseEndpoints(endpoints =>
             {
